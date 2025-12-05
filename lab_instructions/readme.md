@@ -29,7 +29,7 @@ If you do please follow the [directions in the FAQ](https://docs.snowconvert.com
 
 When you open the application it may prompt you to update it, if an update is available please update the application:
 
-![Update Prompt](images/image003.jpg)
+![Update Prompt](images/images003b.jpg)
 
 Go ahead and update the tool if needed. When working with the application, it is generally better to keep it as up to date as possible. This is a local application. Keeping it up to date not only ensures the functionality of the application, but also ensures that you have the most up to date version of the conversion core.
 
@@ -37,11 +37,11 @@ Create a new folder in your Documents folder (or wherever you want so it is sepa
 
 Going back to SnowConvert Select New Project.
 
-![New Project](images/image004.jpg)
+![New Project](images/image004b.jpg)
 
 To begin using any version of SnowConvert, you will need to create a project. Think of a project as a local config file that will be saved to your machine. This will preserve any settings and will allow you to continue where you left off if you need to step away.
 
-![Project Setup](images/image005.jpg)
+![Project Setup](images/image005b.jpg)
 
 Let's call our project: **SQL Server ADW Test**
 
@@ -49,15 +49,11 @@ We then need to select a source. In this case, it is SQL Server.
 
 To run any element of a project in SnowConvert, you will need to provide an access code. Unless you have used SnowConvert before, you will need an access code. Happily, you can request access in the tool by selecting "Get an access code" next to the access code drop down.
 
-![Access Code Request](images/image006.jpg)
+>Note that if you have already activated an access code, you will see options in the dropdown menu in the license screen as shown here:
 
-Note that if you have already activated an access code, you will see options in the dropdown menu in the license screen as shown here:
+![Access Code Request](images/image006b.jpg)
 
-![Access Code Dropdown](images/image007.jpg)
-
-You can choose an access code from this list if you have already activated one.
-
-Assuming we do not yet have an access code, let's request an access code. Choose "Get an access code" from the menu to the right side of the dropdown menu. When you do this, the access code form will pop up:
+Assuming we do not yet have an access code, let's request an access code. Choose "Request access code" from the hyperlinks under the dropdown for access code. When you do this, the access code form will pop up:
 
 ![Access Code Form](images/image008.jpg)
 
@@ -71,7 +67,39 @@ Paste this access code into the application where it says "Enter new access code
 
 You will need to have an active internet connection in order to activate your access code. If you are unable to activate your access code, check out [the troubleshooting section](https://docs.snowconvert.com/sc/general/frequently-asked-questions-faq#why-am-i-not-receiving-an-access-code) of the SnowConvert documentation.
 
-Now that we're active, let's Extract!
+### Add Snowflake Connectivity Information
+After entering your access code you can then  put in your Snowflake Connectivity which will be used for later when you push the data to Snowflake.
+
+>You will need to connect to one of the **RTF labeled VPN's**, this will enable full tunneling which is needed to get to the SQL Server we have for this lab.  With the RTF you will also be able to still connect to your Snowflake Demo account based on the VPN security requirement we have for SE Demo account
+![VPN Access](images/image010a.jpg)
+
+Log into your Snowflake account and run the below SQL to give you the correct permissions as well as create a database and create a warehouse for this lab:
+```sql
+--elevate privledges to grant a migration privledge to your role
+use role accountadmin;
+
+--grant migration privledge
+grant create migration on account to role sysadmin;
+
+--use a non admin role for best practices
+use role sysadmin;
+
+--create a database as a landing zone for the migration
+Create or replace database AdventureWorks;
+
+CREATE OR REPLACE WAREHOUSE medium 
+WITH 
+    WAREHOUSE_SIZE = 'MEDIUM'
+    AUTO_SUSPEND = 300
+    AUTO_RESUME = TRUE;
+```
+
+Then complete the rest of the Snowconvert New Project page with your Snowflake Connection information which is easily accessible in your demo account under 'Connect a Tool to Snowflake'.  **Be ready for MFA authentication** when you click Test Connection
+
+![Snowflake Connectivity](images/image010b.jpg)
+
+
+Now that we're all connected and setup for the migration, let's Extract!
 
 ---
 
@@ -79,11 +107,11 @@ Now that we're active, let's Extract!
 
 From the Project Creation menu, select the blue "GO TO EXTRACTION ->" button in the bottom right corner of the application. This will prompt you to create a connection to a SQL Server account and database.
 
-![Go to Extraction](images/image011.jpg)
+![Go to Extraction](images/image011b.jpg)
 
 The "From SQL Server" form will launch:
 
-![SQL Server Form](images/image012.jpg)
+![SQL Server Form](images/image012b.jpg)
 
 Here is the connection information we're going to use:
 
@@ -96,27 +124,27 @@ Here is the connection information we're going to use:
 
 Check both boxes for "Trust Server Certificate" and "Encrypt Connection".
 
+>If you are unable to connect make sure you are connected to one of the RFT VPN Gateways, the server is only reachable through the full tunnel VPN
+
 Now we will have to specify a local path for our project folder. Anything that we do in SnowConvert will be preserved in this project path as well as anything that is created locally. Choose a path that is fully accessible to you. This is the directory we created before this in the Documents folder and 'SnowConvert. In my case my full project parent folder path is: /Users/damurphy/Documents/Snowconvert/
 
 You will get a pop up that says "Connect Established" when you have connected. SnowConvert will then take you to the catalog screen:
 
-![Catalog Screen](images/image013.jpg)
+![Catalog Screen](images/image013b.jpg)
 
 The catalog screen allows you to browse objects that were found in the database. For SQL Server, this could be tables, views, procedures, or functions. Nothing has been converted yet. This is merely an inventory of what SnowConvert found in the source.
 
 Using the catalog, we can select a set of objects for which we'd like to extract the DDL. Using the filter options, you can search for a specific object or set of objects. Using the checkboxes, you can select a specific subset of objects or select the highest checkbox to select everything:
 
-![Catalog Selection](images/image014.jpg)
+![Catalog Selection](images/image014b.jpg)
 
 In this example, we will select the top checkbox and select everything. This will include tables, views, and functions. Then select "EXTRACT OBJECTS" to extract the DDL.
-
-![Extract Objects](images/image015.jpg)
 
 This will create a folder on the local machine preserving the structure of the objects in the database with a file for the DDL for each object.
 
 When the extraction is complete, you will see a results screen similar to this:
 
-![Extraction Results](images/image016.jpg)
+![Extraction Results](images/image016b.jpg)
 
 This will give you a brief overview of what was extracted. If there were errors or something was not able to be extracted, it will be reported to you here.
 
@@ -128,43 +156,39 @@ But since the number of objects we have extracted matches what we expected and t
 
 Note that now we can see a green checkbox where the DDL was successfully extracted for the object:
 
-![Green Checkmarks](images/image018.jpg)
+![Green Checkmarks](images/image018b.jpg)
 
 If there was an error extracting the DDL, you would see a red X and would need to resolve why that was not extracted.
+
+Once complete you can click Continue on the bottom right and it will bring you back to the main screen:
+
+![Green Checkmarks](images/image018c.jpg)
 
 ---
 
 ## Step 3: Conversion
 
-At this point, we've extracted the objects in the database and we're ready to assess the compatibility with Snowflake and begin the conversion process. There are some optional steps we can do before we get to the conversion itself. Let's take a look at this by selecting "GO TO MAPPINGS ->" in the bottom right corner of the application.
+Moving to the Conversion part lets click on the Convert Code and ETL/BI Projects
 
-This brings us to the mapping screen.
+![Mapping Screen](images/image019a.jpg)
 
-![Mapping Screen](images/image019.jpg)
+We will use all default settings so lets click 'Use default settings' and click continue
 
-On this screen, you can choose a new name for a specific object in Snowflake (i.e. map a single object from SQL Server to Snowflake). You can also choose BULK MAPPING to apply a prefix or suffix to all of the objects or a subset of them (such as tables or view).
+![Mapping Screen](images/image019b.jpg)
 
-![Bulk Mapping](images/image020.jpg)
+The next screen to come up is the mapping, since we chose defaults it will just name all the objects the same.
+
+![Mapping Screen](images/image019c.jpg)
 
 Note that this is completely optional when doing the migration. In this scenario, we will not do any custom mappings. **We will not do this** for the lab, but it is good to know that it is available. At the time of writing this lab, changing object names may have an adverse effect on dependent objects like views. For example, if I change a table name I will have to change the view definition to match the new table name. We plan on catching this in the future but at this time it is not the case.
 
 Since we are leaving our object names unaffected, let's start the conversion process. Select "START CONVERSION" in the bottom right hand corner of the application.
 
-You will view an error message similar to this one:
-
-![Conversion Warning](images/image021.jpg)
-
-This simply means that SnowConvert has scanned the code that it extracted from the database before it runs its conversion script, and has found some things that COULD cause errors. It will tell you some things you might want to change in the source before converting. These can be found in the "Scope validation report" that you can read. In this scenario, **we'll just click "CONTINUE".**
-
 SnowConvert will then execute its conversion engine. This is done by scanning the codebase and creating a semantic model of the source codebase. This model is then used by SnowConvert to create the output Snowflake code as well as the generated reports.
 
-When the conversion is finished, each step will be highlighted:
+When the conversion is finished, you will see a summary of the results
 
-![Conversion Complete](images/image022.jpg)
-
-Select "VIEW RESULTS"
-
-![View Results](images/image023.jpg)
+![View Results](images/image023a.jpg)
 
 The results page will give you a code completeness score initially, but there is more information below if you scroll down. There is more information on each element of the output report [in the SnowConvert documentation](https://docs.snowconvert.com/sc/general/getting-started/running-snowconvert/review-results), but we'll just highlight a few elements of the report for this lab, and we'll do the followup for each of them which will explore more in depth.
 
@@ -186,19 +210,22 @@ In this scenario, we have 100% code completeness. This makes sense given that we
 
 **Conversion Overview**: Now that we have seen that we have the code that we need for this, let's see how much of our code was converted. Let's review the Code Units Summary section. This section is in the main window just scroll down in the conversion results page:
 
-![Code Units Summary](images/image027.jpg)
+![Code Units Summary](images/image027a.jpg)
 
 Looks like we have tables, views, and functions in this codebase, but not a lot of code in general (this looks like less than 1000 lines of code in total). There also is only one "EWI's" (in the last column), meaning that the majority of this extracted DDL can be moved over to Snowflake just by using SnowConvert. We'll look through the EWI's in a moment.
 
 Understanding what we have is essential to successfully completing a migration. If we were pre-migration, we would likely stop here and review the object inventory. We'd also want to run the Snowpark Migration Accelerator (SMA) to validate that any pipelines we have include the objects that we are migrating here. In this scenario, we are going to go ahead and move forward to work through any issues that we have and will run the SMA later.
 
-Since we have a good understanding of what needs to be done and it's relatively small, let's go ahead and attack this. Let's resolve the issues that we have present. Before we do that, let's take a look at the status in our object inventory. Select "GO TO DEPLOYMENT" in the application.
+Since we have a good understanding of what needs to be done and it's relatively small, let's go ahead and attack this. Let's resolve the issues that we have present. Before we do that, let's take a look at the status in our object inventory. Select "GO TO AI VERIFICATION" in the application.
 
-![Go to Deployment](images/image028.jpg)
+![Go to Deployment](images/image028a.jpg)
 
 ---
 
-## Step 4: Deployment
+## Step 4: AI Verification
+
+
+## Step 4b: Deployment Verfication (old path)
 
 This will take you back to the inventory screen. It should look something like this:
 
