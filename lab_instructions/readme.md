@@ -226,7 +226,7 @@ Since we have a good understanding of what needs to be done and it's relatively 
 
 > SnowConvert now includes built-in AI Verification, streamlining the lab workflow. Previously, you needed to use a VSCode plugin to request information from Cortex. This can still be found [here](oldpath.md). The VSCode method still works, the new built-in feature eliminates the need to switch between applications. 
 
-Lets go ahead and run the AI Verification in Snowconvert:
+Lets go ahead and run the AI Verification in SnowConvert:
 
 First we need to make sure we have our connection to Snowflake setup.  Remember it will also prompt you in Duo be ready for that
 
@@ -244,7 +244,7 @@ After this runs you will see it running this will take a little bit of time to c
 
 ![Snowflake Connection](images/image029d.jpg)
 
-Once complete you will see all the stats and notice a few suggested fixeds by the AI.  Go ahead and filter to see the suggested fixes by the drop down and you will see the three issues it is suggesting to fix
+Once complete you will see all the stats and notice a few suggested fixes by the AI.  Go ahead and filter to see the suggested fixes by the drop down and you will see the three issues it is suggesting to fix
 
 ![Snowflake Connection](images/image029e.jpg)
 
@@ -291,8 +291,6 @@ Click **Migrate Data** and this will transfer all the data to the source system.
 Go to your Snowflake Environment and check to make sure all the objects and data were moved successfully.
 
 ![data migration](images/image031c.jpg)
-
-
 
 ---
 
