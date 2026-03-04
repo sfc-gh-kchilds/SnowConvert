@@ -27,6 +27,8 @@ You might receive this message when you try to open SnowConvert for the first ti
 
 If you do please follow the [directions in the FAQ](https://docs.snowconvert.com/sc/general/frequently-asked-questions-faq#how-do-i-give-permission-to-snowconvert-config-folder) to resolve this issue.
 
+**Important:** When signing in to Snowflake from SnowConvert, make sure you select your **personal demo account** (not SNOWHOUSE or any shared account). Use **Standard** authentication (username/password) — PAT (Personal Access Token) authentication does not work reliably with SnowConvert.
+
 When you open the application it may prompt you to update it, if an update is available please update the application:
 
 ![Update Prompt](images/images003b.jpg)
@@ -49,7 +51,7 @@ We then need to select a source. In this case, it is SQL Server.
 
 To run any element of a project in SnowConvert, you may need to provide an access code. Unless you have used SnowConvert before, you will need an access code. Happily, you can request access in the tool by selecting "Get an access code" next to the access code drop down.
 
-> **Note:** In newer versions of SnowConvert AI, the access code step may no longer appear. If you do not see the access code prompt, you can skip ahead to the Snowflake Connectivity section below.
+> **Note:** In newer versions of SnowConvert AI, the access code step may no longer appear. If you do not see the access code prompt, skip ahead to the [Add Snowflake Connectivity Information](#add-snowflake-connectivity-information) section below (by the VPN image).
 
 >Note that if you have already activated an access code, you will see options in the dropdown menu in the license screen as shown here:
 
@@ -96,28 +98,7 @@ WITH
     AUTO_RESUME = TRUE;
 ```
 
-> **Important:** When signing in to Snowflake from SnowConvert, make sure you select your **personal demo account** (not SNOWHOUSE or any shared account). Use **Standard** authentication (username/password) — PAT (Personal Access Token) authentication does not work reliably with SnowConvert.
-
-Then complete the rest of the Snowconvert New Project page with your Snowflake Connection information which is easily accessible in your demo account under 'Connect a Tool to Snowflake'. Make sure to also select a **warehouse** (e.g., `MEDIUM`) in the connection settings — this is needed for AI Verification later. **Be ready for MFA authentication** when you click Test Connection
-
-![Snowflake Connectivity](images/image010b.jpg)
-
-
-Now that we're all connected and setup for the migration, let's Extract!
-
----
-
-## Step 2: Extract
-
-From the Project Creation menu, select **"Extract Code"** to proceed to the extraction step. This will prompt you to create a connection to a SQL Server account and database.
-
-> **Note:** In older versions, this was a blue "GO TO EXTRACTION ->" button. In newer versions, you need to explicitly select "Extract Code" from the available options.
-
-![Go to Extraction](images/image011b.jpg)
-
-The "From SQL Server" form will launch:
-
-![SQL Server Form](images/image012b.jpg)
+Then complete the rest of the Snowconvert New Project page with your Snowflake Connection information which is easily accessible in your demo account under 'Connect a Tool to Snowflake'. Click on the demo account connection in the top right of the app and make sure you enter the **warehouse** as `MEDIUM` — this is needed for AI Verification later. **Be ready for MFA authentication** when you click Test Connection.
 
 Here is the connection information we're going to use for the **SQL Server** source (this is NOT your Snowflake account — this is the SQL Server database we are migrating from):
 
@@ -131,6 +112,22 @@ Here is the connection information we're going to use for the **SQL Server** sou
 Check both boxes for "Trust Server Certificate" and "Encrypt Connection".
 
 >If you are unable to connect make sure you are connected to one of the RFT VPN Gateways, the server is only reachable through the full tunnel VPN
+
+![Select a Connection](images/image010c.jpg)
+
+![SQL Server Connection Form](images/image012b.jpg)
+
+Now that we're all connected and setup for the migration, let's Extract!
+
+---
+
+## Step 2: Extract
+
+From the Project Creation menu, select **"Extract Code"** to proceed to the extraction step. This will prompt you to create a connection to a SQL Server account and database.
+
+> **Note:** In older versions, this was a blue "GO TO EXTRACTION ->" button. In newer versions, you need to explicitly select "Extract Code" from the available options.
+
+![Go to Extraction](images/image011b.jpg)
 
 Now we will have to specify a local path for our project folder. Anything that we do in SnowConvert will be preserved in this project path as well as anything that is created locally. Choose a path that is fully accessible to you. This is the directory we created before this in the Documents folder and 'SnowConvert'. For example, your full project parent folder path might be: `/Users/<your_username>/Documents/Snowconvert/`
 
@@ -178,8 +175,6 @@ Moving to the Conversion part lets click on the **Convert Code and ETL/BI Projec
 
 > **Important:** You may also see a "Convert with AI" option. This does not work in the current version — use **"Convert code and ETL/BI projects"** instead.
 
-![Mapping Screen](images/image019a.jpg)
-
 We will use all default settings so lets click 'Use default settings' and click continue
 
 ![Mapping Screen](images/image019b.jpg)
@@ -193,6 +188,8 @@ Note that this is completely optional when doing the migration. In this scenario
 Since we are leaving our object names unaffected, let's start the conversion process. Select "START CONVERSION" in the bottom right hand corner of the application.
 
 SnowConvert will then execute its conversion engine. This is done by scanning the codebase and creating a semantic model of the source codebase. This model is then used by SnowConvert to create the output Snowflake code as well as the generated reports.
+
+> **Troubleshooting:** If you see the error "Failed to prepare code processor for SqlServer", see the [troubleshooting guide](../troubleshooting/readme.md#failed-to-prepare-code-processor-for-sqlserver-error) for the resolution.
 
 When the conversion is finished, you will see a summary of the results
 
