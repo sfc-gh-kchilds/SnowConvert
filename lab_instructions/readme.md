@@ -27,7 +27,7 @@ You might receive this message when you try to open SnowConvert for the first ti
 
 If you do please follow the [directions in the FAQ](https://docs.snowconvert.com/sc/general/frequently-asked-questions-faq#how-do-i-give-permission-to-snowconvert-config-folder) to resolve this issue.
 
-**Important:** When signing in to Snowflake from SnowConvert, make sure you select your **personal demo account** (not SNOWHOUSE or any shared account). Use **Standard** authentication (username/password) — PAT (Personal Access Token) authentication does not work reliably with SnowConvert.
+**Important:** When signing in to Snowflake from SnowConvert, make sure you select your **personal demo account** (not SNOWHOUSE or any shared account). If PAT (Personal Access Token) authentication doesn't work, use **Standard** authentication (username/password) instead.
 
 When you open the application it may prompt you to update it, if an update is available please update the application:
 
