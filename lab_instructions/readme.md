@@ -7,7 +7,7 @@ To run through this lab, you need the following resources:
 - SnowConvert - Follow the steps below to download SnowConvert from inside your demo account:
   ![SnowConvert Download](images/Snowconvert_Download.jpg)
 
-- [Snowflake VS Code Extension](https://docs.snowflake.com/en/user-guide/vscode-ext)
+- (Optional) [Snowflake VS Code Extension](https://docs.snowflake.com/en/user-guide/vscode-ext) — only needed if you want to follow the [old path](oldpath.md) for issue resolution. The new path uses SnowConvert's built-in AI Verification.
 
 Both of these will run on your local machine. There are settings you will have to change to ensure everything runs correctly, but that will all be detailed in the walkthrough below.
 
@@ -47,7 +47,9 @@ Let's call our project: **SQL Server ADW Test**
 
 We then need to select a source. In this case, it is SQL Server.
 
-To run any element of a project in SnowConvert, you will need to provide an access code. Unless you have used SnowConvert before, you will need an access code. Happily, you can request access in the tool by selecting "Get an access code" next to the access code drop down.
+To run any element of a project in SnowConvert, you may need to provide an access code. Unless you have used SnowConvert before, you will need an access code. Happily, you can request access in the tool by selecting "Get an access code" next to the access code drop down.
+
+> **Note:** In newer versions of SnowConvert AI, the access code step may no longer appear. If you do not see the access code prompt, you can skip ahead to the Snowflake Connectivity section below.
 
 >Note that if you have already activated an access code, you will see options in the dropdown menu in the license screen as shown here:
 
@@ -75,10 +77,10 @@ After entering your access code you can then  put in your Snowflake Connectivity
 
 Log into your Snowflake account and run the below SQL to give you the correct permissions as well as create a database and create a warehouse for this lab:
 ```sql
---elevate privledges to grant a migration privledge to your role
+--elevate privileges to grant a migration privilege to your role
 use role accountadmin;
 
---grant migration privledge
+--grant migration privilege
 grant create migration on account to role sysadmin;
 
 --use a non admin role for best practices
@@ -94,7 +96,9 @@ WITH
     AUTO_RESUME = TRUE;
 ```
 
-Then complete the rest of the Snowconvert New Project page with your Snowflake Connection information which is easily accessible in your demo account under 'Connect a Tool to Snowflake'.  **Be ready for MFA authentication** when you click Test Connection
+> **Important:** When signing in to Snowflake from SnowConvert, make sure you select your **personal demo account** (not SNOWHOUSE or any shared account). Use **Standard** authentication (username/password) — PAT (Personal Access Token) authentication does not work reliably with SnowConvert.
+
+Then complete the rest of the Snowconvert New Project page with your Snowflake Connection information which is easily accessible in your demo account under 'Connect a Tool to Snowflake'. Make sure to also select a **warehouse** (e.g., `MEDIUM`) in the connection settings — this is needed for AI Verification later. **Be ready for MFA authentication** when you click Test Connection
 
 ![Snowflake Connectivity](images/image010b.jpg)
 
@@ -105,7 +109,9 @@ Now that we're all connected and setup for the migration, let's Extract!
 
 ## Step 2: Extract
 
-From the Project Creation menu, select the blue "GO TO EXTRACTION ->" button in the bottom right corner of the application. This will prompt you to create a connection to a SQL Server account and database.
+From the Project Creation menu, select **"Extract Code"** to proceed to the extraction step. This will prompt you to create a connection to a SQL Server account and database.
+
+> **Note:** In older versions, this was a blue "GO TO EXTRACTION ->" button. In newer versions, you need to explicitly select "Extract Code" from the available options.
 
 ![Go to Extraction](images/image011b.jpg)
 
@@ -113,7 +119,7 @@ The "From SQL Server" form will launch:
 
 ![SQL Server Form](images/image012b.jpg)
 
-Here is the connection information we're going to use:
+Here is the connection information we're going to use for the **SQL Server** source (this is NOT your Snowflake account — this is the SQL Server database we are migrating from):
 
 - Authentication Method: **Standard**
 - Server URL: **snowconvert-datamigration.database.windows.net**
@@ -126,7 +132,7 @@ Check both boxes for "Trust Server Certificate" and "Encrypt Connection".
 
 >If you are unable to connect make sure you are connected to one of the RFT VPN Gateways, the server is only reachable through the full tunnel VPN
 
-Now we will have to specify a local path for our project folder. Anything that we do in SnowConvert will be preserved in this project path as well as anything that is created locally. Choose a path that is fully accessible to you. This is the directory we created before this in the Documents folder and 'SnowConvert. In my case my full project parent folder path is: /Users/damurphy/Documents/Snowconvert/
+Now we will have to specify a local path for our project folder. Anything that we do in SnowConvert will be preserved in this project path as well as anything that is created locally. Choose a path that is fully accessible to you. This is the directory we created before this in the Documents folder and 'SnowConvert'. For example, your full project parent folder path might be: `/Users/<your_username>/Documents/Snowconvert/`
 
 You will get a pop up that says "Connect Established" when you have connected. SnowConvert will then take you to the catalog screen:
 
@@ -168,7 +174,9 @@ Once complete you can click Continue on the bottom right and it will bring you b
 
 ## Step 3: Conversion
 
-Moving to the Conversion part lets click on the Convert Code and ETL/BI Projects
+Moving to the Conversion part lets click on the **Convert Code and ETL/BI Projects**.
+
+> **Important:** You may also see a "Convert with AI" option. This does not work in the current version — use **"Convert code and ETL/BI projects"** instead.
 
 ![Mapping Screen](images/image019a.jpg)
 
@@ -190,11 +198,13 @@ When the conversion is finished, you will see a summary of the results
 
 ![View Results](images/image023a.jpg)
 
-The results page will give you a code completeness score initially, but there is more information below if you scroll down. There is more information on each element of the output report [in the SnowConvert documentation](https://docs.snowconvert.com/sc/general/getting-started/running-snowconvert/review-results), but we'll just highlight a few elements of the report for this lab, and we'll do the followup for each of them which will explore more in depth.
+The results page will give you a code completeness score initially, but there is more information below if you scroll down. There is more information on each element of the output report [in the SnowConvert documentation](https://docs.snowflake.com/en/migrations/snowconvert-docs/general/getting-started/running-snowconvert/review-results/README), but we'll just highlight a few elements of the report for this lab, and we'll do the followup for each of them which will explore more in depth.
 
 **Code Completeness**: This is a reference to any missing elements or objects that are not present in the codebase. If you have 100% code completeness, then you do not have any missing objects or references to missing elements in the codebase.
 
-Let's visit the additional reports that are generated by SnowConvert. Select "VIEW REPORTS" from the bottom of the application:
+Let's visit the additional reports that are generated by SnowConvert. In newer versions, the reports are integrated directly into the results view — you may not see a separate "VIEW REPORTS" button. Scroll down or look for the reports section within the conversion results page.
+
+> **Note:** If you do see a "VIEW REPORTS" button, you can select it to view the reports in a separate window. Otherwise, the reports (including Issues, Missing Objects, etc.) are accessible directly from the results page.
 
 ![View Reports](images/image024.jpg)
 
@@ -228,7 +238,7 @@ Since we have a good understanding of what needs to be done and it's relatively 
 
 Lets go ahead and run the AI Verification in SnowConvert:
 
-First we need to make sure we have our connection to Snowflake setup.  Remember it will also prompt you in Duo be ready for that
+First we need to make sure we have our connection to Snowflake setup. Ensure you have a **warehouse** selected (e.g., `MEDIUM`) in your Snowflake connection settings — AI Verification requires a warehouse to run. Also make sure you are signed into your **personal demo account** (not SNOWHOUSE). Remember it will also prompt you in Duo be ready for that
 
 ![Snowflake Connection](images/image029a.jpg)
 
@@ -244,15 +254,15 @@ After this runs you will see it running this will take a little bit of time to c
 
 ![Snowflake Connection](images/image029d.jpg)
 
-Once complete you will see all the stats and notice a few suggested fixes by the AI.  Go ahead and filter to see the suggested fixes by the drop down and you will see the three issues it is suggesting to fix
+Once complete you will see all the stats and notice a few suggested fixes by the AI.  Go ahead and filter to see the suggested fixes by the drop down and you will see the four issues it is suggesting to fix
 
 ![Snowflake Connection](images/image029e.jpg)
 
-You can then see the detail of the suggestions by clicking on the **see more** link in the comment section.  From there you can review it and accept it if you agree with it.  In this case we will agree with all suggestions:
+You can then see the detail of the suggestions by clicking on the **Details** link in the comment section.  From there you can review it and click **accept changes** if you agree with it.  In this case we will agree with all suggestions:
 
 ![Snowflake Connection](images/image029f.jpg)
 
-When you have accepted these three suggestions go ahead and click **Go to deployment** on the bottom.
+When you have accepted these four suggestions go ahead and click **Go to deployment** on the bottom.
 
 ## Step 5: Deploy
 Make sure you have your connection information in the Snowflake Connection Section.  This information can easily be found in your connect an app to snowflake section in your account.
@@ -304,8 +314,8 @@ If we review the steps that we did, let's see how they fit in with our migration
 - Extracted the schema from the source database
 - Ran SnowConvert's assessment and conversion engine on the extracted schema
 - Reviewed the output reporting to better understand what we have
-- Reviewed what could not be converted in the VS Code Extension
-- Generated new code in the VS Code Extension
+- Reviewed what could not be converted using AI Verification
+- Generated new code using AI Verification
 - Deployed the code to Snowflake
 - Moved the data from the source to Snowflake
 - All the while, we were able to track things in our object inventory.
@@ -318,8 +328,8 @@ And you can generally see that most of these activities fit our **assess** -> **
 - Extracted the schema from the source database **so we can see what kind of DDL we are working with**
 - Ran SnowConvert's assessment and conversion engine on the extracted schema **to analyze what we have for our initial assessment, and generate the output converted code**
 - Reviewed the output reporting to better understand what we have **to build our assessment of what we have**
-- Reviewed what could not be converted in the VS Code Extension **to assess what work needs to be done**
-- Generated new code in the VS Code Extension **to resolve any errors in the initial conversion**
+- Reviewed what could not be converted using AI Verification **to assess what work needs to be done**
+- Generated new code using AI Verification **to resolve any errors in the initial conversion**
 - Deployed the code to Snowflake **to validate that the schema works**
 - Moved the data from the source to Snowflake **to convert our data into Snowflake data**
 - All the while, we were able to track things in our object inventory **to better understand where we are in the migration process**.

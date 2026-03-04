@@ -24,7 +24,7 @@ FROM (
             FROM TABLES
             where table_schema = 'DBO'
         ) AS actual,
-        34 AS expected,
+        35 AS expected,
         'All Tables and Views Created for SnowConvert Lab' AS description
 );
 
